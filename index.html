@@ -3,442 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garagem Inteligente Unificada - IFPR</title>
+    <title>Garagem Inteligente</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Se for usar Font Awesome (exemplo) -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
 </head>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
 <body>
-    <div class="app-container">
-        <!-- Navegação Lateral -->
-        <nav class="sidebar">
-            <h1>Garagem Uni</h1>
-            <ul>
-                <li><button class="nav-button active" data-target-id="secao-garagem">Minha Garagem</button></li>
-                <li><button class="nav-button" data-target-id="secao-add-veiculo">Adicionar Veículo</button></li>
-                <li><button class="nav-button" data-target-id="secao-historico">Histórico Manutenção</button></li>
-                <li><button class="nav-button" data-target-id="secao-agendamento">Agendar Manutenção</button></li>
-                <!-- Se você já adicionou a previsão do tempo, mantenha o botão aqui -->
-                <!-- <li><button class="nav-button" data-target-id="secao-previsao-tempo-detalhada">Previsão Detalhada</button></li> -->
-            </ul>
-        </nav>
-        
+    <h1>Garagem da Barbie</h1>
 
-        <!-- Área de Conteúdo Principal -->
-        <main class="content-area">
-            <!-- Mensagens de Feedback/Erro -->
-            <div id="feedback-message" class="feedback" style="display: none;"></div>
+    <div id="notificacoes" class="notificacoes-container"></div>
 
-            <!-- Seção: Minha Garagem -->
-            <section id="secao-garagem" class="content-section active">
-                <h1>Garagem da Barbie</h1>
-                <div id="selecao-veiculo">
-                    <h2>Escolha um Veículo:</h2>
-                    <button data-target-id="veiculo-caminhao">
-                        <img src="imagens/mnhaorosa.webp" alt="Caminhão"> Caminhão
-                    </button>
-                    <button data-target-id="veiculo-carro">
-                        <img src="imagens/fusca.png" alt="Carro"> Carro
-                    </button>
-                    <button data-target-id="veiculo-esportivo">
-                        <img src="imagens/rosaesport.png" alt="Carro Esportivo"> Carro Esportivo
-                    </button>
-                    <button data-target-id="veiculo-moto">
-                        <img src="imagens/motoca.jpg" alt="Motocicleta"> Motocicleta
-                    </button>
-                    <button id="esconder-todos-btn" class="hide-button">Esconder Veículo</button>
-                </div>
-                <div class="garagem">
-                    <div class="veiculo" id="veiculo-caminhao">
-                        <h2>Caminhão</h2>
-                        <img src="imagens/mnhaorosa.webp" alt="Ícone de Caminhão" class="veiculo-img">
-                        <p>Modelo: <span id="caminhao-modelo">Scania R450</span></p>
-                        <p>Cor: <span id="caminhao-cor">Azul</span></p>
-                        <p>Ligado: <span id="caminhao-ligado">Não</span></p>
-                        <p>Velocidade: <span id="caminhao-velocidade">0</span> km/h</p>
-                        <div class="velocidade-bar-container">
-                            <div id="caminhao-velocidade-bar" class="velocidade-bar"></div>
-                        </div>
-                        <p>Carga Máx.: <span id="caminhao-carga-max">20000</span> kg</p>
-                        <p>Carga Atual: <span id="caminhao-carga-atual">0</span> kg</p>
-                        <div class="controles">
-                            <button id="caminhao-ligar-btn">Ligar</button>
-                            <button id="caminhao-desligar-btn">Desligar</button>
-                            <button id="caminhao-acelerar-btn">Acelerar</button>
-                            <button id="caminhao-frear-btn">Frear</button>
-                        </div>
-                    </div>
-                    <div class="veiculo" id="veiculo-carro">
-                        <h2>Carro</h2>
-                        <img src="imagens/fusca.png" alt="Ícone de Carro" class="veiculo-img"> <!-- Verifique o caminho da imagem 'fuscarosa.avif' que você tinha -->
-                        <p>Modelo: <span id="carro-modelo">Onix</span></p>
-                        <p>Cor: <span id="carro-cor">Prata</span></p>
-                        <p>Ligado: <span id="carro-ligado">Não</span></p>
-                        <p>Velocidade: <span id="carro-velocidade">0</span> km/h</p>
-                        <div class="velocidade-bar-container">
-                            <div id="carro-velocidade-bar" class="velocidade-bar"></div>
-                        </div>
-                        <div class="controles">
-                            <button id="carro-ligar-btn">Ligar</button>
-                            <button id="carro-desligar-btn">Desligar</button>
-                            <button id="carro-acelerar-btn">Acelerar</button>
-                            <button id="carro-frear-btn">Frear</button>
-                        </div>
-                    </div>
-                    <div class="veiculo" id="veiculo-esportivo">
-                        <h2>Carro Esportivo</h2>
-                        <img src="imagens/rosaesport.png" alt="Ícone de Carro Esportivo" class="veiculo-img">
-                        <p>Modelo: <span id="esportivo-modelo">Ferrari 488</span></p>
-                        <p>Cor: <span id="esportivo-cor">Vermelha</span></p>
-                        <p>Ligado: <span id="esportivo-ligado">Não</span></p>
-                        <p>Velocidade: <span id="esportivo-velocidade">0</span> km/h</p>
-                        <div class="velocidade-bar-container">
-                            <div id="esportivo-velocidade-bar" class="velocidade-bar"></div>
-                        </div>
-                        <p>Turbo: <span id="esportivo-turbo">Inativo</span></p>
-                        <div class="controles">
-                            <button id="esportivo-ligar-btn">Ligar</button>
-                            <button id="esportivo-desligar-btn">Desligar</button>
-                            <button id="esportivo-acelerar-btn">Acelerar</button>
-                            <button id="esportivo-frear-btn">Frear</button>
-                            <button id="esportivo-turbo-btn" class="turbo-btn">Ativar Turbo</button>
-                        </div>
-                    </div>
-                    <div class="veiculo" id="veiculo-moto">
-                        <h2>Motocicleta</h2>
-                        <img src="imagens/motoca.jpg" alt="Ícone de Motocicleta" class="veiculo-img"> <!-- Verifique o caminho da imagem 'motorosa.jpg' que você tinha -->
-                        <p>Modelo: <span id="moto-modelo">CB 500</span></p>
-                        <p>Cor: <span id="moto-cor">Preta</span></p>
-                        <p>Ligado: <span id="moto-ligado">Não</span></p>
-                        <p>Velocidade: <span id="moto-velocidade">0</span> km/h</p>
-                        <div class="velocidade-bar-container">
-                            <div id="moto-velocidade-bar" class="velocidade-bar"></div>
-                        </div>
-                        <p>Boost: <span id="moto-boost">Inativo</span></p>
-                        <div class="controles">
-                            <button id="moto-ligar-btn">Ligar</button>
-                            <button id="moto-desligar-btn">Desligar</button>
-                            <button id="moto-acelerar-btn">Acelerar</button>
-                            <button id="moto-frear-btn">Frear</button>
-                            <button id="moto-boost-btn" class="turbo-btn">Ativar Boost</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Seção: Adicionar Veículo -->
-            <section id="secao-add-veiculo" class="content-section">
-                <h2>Adicionar Novo Veículo</h2>
-                <!-- Adicionando a classe 'modern-form' para estilização -->
-                <form id="form-add-veiculo" class="modern-form">
-                    <div class="form-group">
-                        <label for="add-placa">Placa:</label>
-                        <input type="text" id="add-placa" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="add-modelo">Modelo:</label>
-                        <input type="text" id="add-modelo" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="add-marca">Marca:</label>
-                        <input type="text" id="add-marca">
-                    </div>
-                    <div class="form-group">
-                        <label for="add-ano">Ano:</label>
-                        <input type="number" id="add-ano">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Veículo</button>
-                </form>
-            </section>
-
-            <!-- Seção: Histórico de Manutenção -->
-            <section id="secao-historico" class="content-section">
-                <h2>Histórico de Manutenção</h2>
-                <div class="form-group filter-group"> <!-- Agrupando filtro -->
-                    <label for="select-veiculo-historico">Selecione o Veículo:</label>
-                    <select id="select-veiculo-historico">
-                        <option value="">-- Selecione --</option>
-                    </select>
-                    <!-- <button id="filtrar-historico-btn" class="btn btn-secondary">Filtrar</button> Opcional: botão de filtro explícito -->
-                </div>
-                <div id="historico-detalhes" class="info-display-area">
-                     <p class="placeholder-text">Selecione um veículo para ver o histórico.</p>
-                     <!-- Exemplo de como o histórico poderia ser renderizado (será feito via JS) -->
-                     <!--
-                     <div class="historico-item card">
-                         <h4>Manutenção em 01/07/2024</h4>
-                         <p><strong>Serviço:</strong> Troca de óleo e filtro.</p>
-                         <p><strong>Custo:</strong> R$ 250,00</p>
-                         <p><strong>Observações:</strong> Utilizado óleo 5W-30 sintético.</p>
-                     </div>
-                     -->
-                </div>
-            </section>
-
-            <!-- Seção: Agendar Manutenção -->
-            <section id="secao-agendamento" class="content-section">
-                <h2>Agendar Nova Manutenção</h2>
-                 <form id="form-agendamento" class="modern-form">
-                     <div class="form-group">
-                         <label for="select-veiculo-agendar">Veículo:</label>
-                         <select id="select-veiculo-agendar" required>
-                             <option value="">-- Selecione --</option>
-                         </select>
-                     </div>
-                    <div class="form-group">
-                        <label for="agenda-data">Data:</label>
-                        <input type="date" id="agenda-data" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="agenda-descricao">Descrição Serviço:</label>
-                        <textarea id="agenda-descricao" rows="4" required></textarea>
-                    </div>
-                     <button type="submit" class="btn btn-primary">Agendar Manutenção</button>
-                 </form>
-                 <div id="lista-agendamentos" class="info-display-area">
-                     <h3>Próximos Agendamentos</h3>
-                     <p class="placeholder-text">Nenhum agendamento futuro.</p>
-                     <!-- Exemplo de como um agendamento poderia ser renderizado (será feito via JS) -->
-                     <!--
-                     <div class="agendamento-item card">
-                         <h4>Agendado para: 15/08/2024 - Onix (Prata)</h4>
-                         <p><strong>Serviço:</strong> Revisão dos 30.000km.</p>
-                         <div class="actions">
-                            <button class="btn btn-sm btn-edit">Editar</button>
-                            <button class="btn btn-sm btn-danger">Cancelar</button>
-                         </div>
-                     </div>
-                     -->
-                 </div>
-            </section>
-
-            <!-- Mantenha a seção de previsão do tempo se já a adicionou -->
-            <!--
-            <section id="secao-previsao-tempo-detalhada" class="content-section">
-                 ... seu conteúdo de previsão ...
-            </section>
-            -->
-
-              <!-- Na <main class="content-area">, depois da última seção -->
-<section id="secao-previsao-tempo" class="content-section">
-    <h2>Previsão do Tempo Interativa</h2>
-
-    <div class="controles-busca-previsao" style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center; max-width: 500px;">
-        <input type="text" id="cidadePrevisaoInput" placeholder="Digite a cidade" style="flex-grow: 1;">
-        <button id="buscarPrevisaoBtn" class="btn btn-primary">Buscar</button>
+    <div class="add-veiculo-controls">
+        <button id="mostrar-form-add">Adicionar Novo Veículo +</button>
     </div>
 
-    <div id="controlesInterativosPrevisao" style="margin-bottom: 25px; padding: 15px; background-color: var(--cor-fundo-claro); border-radius: var(--border-radius-padrao); border: 1px solid var(--cor-borda-sutil);">
-        <div id="filtroDiasPrevisao" class="filter-group" style="background-color: transparent; border: none; padding: 0; margin-bottom: 15px;">
-            <label for="filtroDiasSelect" style="margin-bottom:0; font-weight: 500;">Mostrar previsão para:</label> <!-- Adicionado label -->
-            <!-- Usaremos botões individuais para melhor estilização e consistência com o que foi pedido -->
-            <button class="btn btn-sm" data-dias="1">Hoje</button>
-            <button class="btn btn-sm" data-dias="3">Próximos 3 Dias</button>
-            <button class="btn btn-sm active-filter" data-dias="5">Próximos 5 Dias</button> <!-- Classe active-filter para o default -->
-        </div>
+    <div id="add-veiculo-form-container" class="add-veiculo-container" style="display: none;">
+        <h2>Adicionar Novo Veículo</h2>
+        <form id="form-add-veiculo">
+            <label for="add-tipo">Tipo:</label>
+            <select id="add-tipo" required>
+                <option value="" disabled selected>-- Selecione o Tipo --</option>
+                <option value="Carro">Carro Comum</option>
+                <option value="CarroEsportivo">Carro Esportivo</option>
+                <option value="Caminhao">Caminhão</option>
+                <option value="Moto">Moto</option>
+                <option value="Bicicleta">Bicicleta</option>
+            </select>
 
-        <div id="destaquesCondicoesPrevisao" style="font-size: 0.9em;">
-            <span style="font-weight: 500; margin-right: 10px;">Destacar dias com:</span>
-            <label class="checkbox-label-previsao"><input type="checkbox" id="chkDestacarChuva"> Chuva</label>
-            <label class="checkbox-label-previsao"><input type="checkbox" id="chkDestacarFrio"> Frio (<10°C)</label>
-            <label class="checkbox-label-previsao"><input type="checkbox" id="chkDestacarCalor"> Calor (>30°C)</label>
+            <label for="add-modelo">Modelo:</label>
+            <input type="text" id="add-modelo" placeholder="Ex: Onix, XRE 300" required>
+
+            <label for="add-cor">Cor:</label>
+            <input type="text" id="add-cor" placeholder="Ex: Prata, Vermelha" required>
+
+            <div id="campo-capacidade-carga" class="campo-opcional">
+                <label for="add-capacidade-carga">Capacidade Carga (kg):</label>
+                <input type="number" id="add-capacidade-carga" placeholder="5000" min="0">
+            </div>
+
+            <div class="form-add-buttons">
+                <button type="submit">Adicionar à Garagem</button>
+                <button type="button" id="cancelar-add-veiculo">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="garagem-container" class="container">
+        <p id="garagem-vazia-msg" style="display: none;">Sua garagem está vazia. Adicione um veículo!</p>
+    </div>
+
+    <div id="detalhes-e-agendamento" class="detalhes-container" style="display: none;">
+        <h2>Detalhes e Manutenção do Veículo Selecionado</h2>
+        <button id="fechar-detalhes" class="close-btn">×</button>
+        <div id="informacoesVeiculo">
+            <div id="detalhesExtrasContainer">
+                <!-- Os detalhes extras serão inseridos aqui -->
+            </div>
+        </div>
+        <div id="agendamento-form-container" style="display: none;">
+            <h3>Agendar Nova Manutenção</h3>
+            <form id="form-agendamento">
+                <label for="agenda-data">Data:</label>
+                <input type="date" id="agenda-data" required>
+                <label for="agenda-tipo">Tipo de Serviço:</label>
+                <input type="text" id="agenda-tipo" placeholder="Ex: Troca de óleo" required>
+                <label for="agenda-custo">Custo (R$):</label>
+                <input type="number" id="agenda-custo" step="0.01" min="0" placeholder="150.00" required>
+                <label for="agenda-descricao">Descrição (Opcional):</label>
+                <textarea id="agenda-descricao" rows="2"></textarea>
+                <button type="submit">Agendar/Registrar</button>
+            </form>
+        </div>
+        <div id="agendamentos-futuros-container" style="display: none;">
+            <h4>Próximos Agendamentos</h4>
+            <pre id="agendamentos-futuros-conteudo"></pre>
         </div>
     </div>
 
-    <!-- Container para os cards da previsão, reutilizando a classe .garagem para o flex layout -->
-    <div id="previsaoTempoContainer" class="garagem" style="min-height: 200px; background-color: transparent; padding:0;">
-        <!-- Cards da previsão serão inseridos aqui pelo JavaScript -->
-        <p class="placeholder-text" id="previsaoPlaceholder">Digite uma cidade para ver a previsão.</p>
+     <div id="planejar-viagem-container" class="planejar-viagem-container">
+        <h2>Planejar Viagem</h2>
+        <label for="destino-viagem">Digite a cidade de destino:</label>
+        <input type="text" id="destino-viagem" placeholder="Digite a cidade de destino">
+        <button id="verificar-clima-btn">Verificar Clima</button>
+        <div id="previsao-tempo-resultado"></div>
     </div>
 
-    <!-- O elemento de feedback geral já existe, mas podemos ter um específico se preferir -->
-    <!-- <div id="erroPrevisaoContainer" class="feedback feedback-error" style="display: none;"></div> -->
-</section>
+    <audio id="som-buzina" src="sounds/buzina.mp3" preload="auto"></audio>
+    <audio id="som-acelerar" src="sounds/carroacelerando.mp3" preload="auto"></audio>
+    <audio id="som-frear" src="sounds/freio.mp3" preload="auto"></audio>
+    <audio id="som-ligar" src="sounds/carrodesligando.mp3" preload="auto"></audio>
+    <audio id="som-desligar" src="sounds/carrodesligando.mp3" preload="auto"></audio>
+    <audio id="som-adicionar" src="sounds/success-add.mp3" preload="auto"></audio>
 
-
-    <!-- Esta div #selecao-veiculo começará escondida -->
-    <div id="selecao-veiculo" style="display: none;">
-        <h2>Escolha um Veículo:</h2>
-        <div class="botoes-selecao-container">
-            <button data-target-id="veiculo-caminhao">
-                <img src="imagens/mnhaorosa.webp" alt="Caminhão"> Caminhão
-            </button>
-            <button data-target-id="veiculo-carro">
-                <img src="imagens/fusca.png" alt="Carro"> Carro
-            </button>
-            <button data-target-id="veiculo-esportivo">
-                <img src="imagens/rosaesport.png" alt="Carro Esportivo"> Carro Esportivo
-            </button>
-            <button data-target-id="veiculo-moto">
-                <img src="imagens/motoca.jpg" alt="Motocicleta"> Motocicleta
-            </button>
-        </div>
-        <!-- Este botão também começará escondido -->
-        <button id="esconder-todos-btn" class="hide-button" style="display: none;">Esconder Veículo</button>
-    </div>
-
-    <div class="garagem">
-        <!-- Cards dos veículos aqui, já controlados para iniciar escondidos -->
-        <div class="veiculo" id="veiculo-caminhao">...</div>
-        <div class="veiculo" id="veiculo-carro">...</div>
-        <div class="veiculo" id="veiculo-esportivo">...</div>
-        <div class="veiculo" id="veiculo-moto">...</div>
-    </div>
-</section>
-<!-- Área de Conteúdo Principal -->
-<main class="content-area">
-    <!-- Mensagens de Feedback/Erro -->
-    <div id="feedback-message" class="feedback" style="display: none;"></div>
-
-    <!-- Seção: Minha Garagem -->
-    <section id="secao-garagem" class="content-section active"> <!-- 'active' se for a inicial -->
-        <h1>Garagem da Barbie</h1>
-        <div id="selecao-veiculo"> <!-- ESTE FICA VISÍVEL POR PADRÃO -->
-            <h2>Escolha um Veículo:</h2>
-            <button data-target-id="veiculo-caminhao">
-                <img src="imagens/mnhaorosa.webp" alt="Caminhão"> Caminhão
-            </button>
-            <button data-target-id="veiculo-carro">
-                <img src="imagens/fusca.png" alt="Carro"> Carro
-            </button>
-            <button data-target-id="veiculo-esportivo">
-                <img src="imagens/rosaesport.png" alt="Carro Esportivo"> Carro Esportivo
-            </button>
-            <button data-target-id="veiculo-moto">
-                <img src="imagens/motoca.jpg" alt="Motocicleta"> Motocicleta
-            </button>
-            <button id="esconder-todos-btn" class="hide-button" style="display: none;">Esconder Veículo</button>
-        </div>
-        <div class="garagem">
-            <div class="veiculo" id="veiculo-caminhao">
-                <h2>Caminhão</h2>
-                <img src="imagens/mnhaorosa.webp" alt="Ícone de Caminhão" class="veiculo-img">
-                <p>Modelo: <span id="caminhao-modelo">Scania R450</span></p>
-                <p>Cor: <span id="caminhao-cor">Azul</span></p>
-                <p>Ligado: <span id="caminhao-ligado">Não</span></p>
-                <p>Velocidade: <span id="caminhao-velocidade">0</span> km/h</p>
-                <div class="velocidade-bar-container">
-                    <div id="caminhao-velocidade-bar" class="velocidade-bar"></div>
-                </div>
-                <p>Carga Máx.: <span id="caminhao-carga-max">20000</span> kg</p>
-                <p>Carga Atual: <span id="caminhao-carga-atual">0</span> kg</p>
-                <div class="controles">
-                    <button id="caminhao-ligar-btn">Ligar</button>
-                    <button id="caminhao-desligar-btn">Desligar</button>
-                    <button id="caminhao-acelerar-btn">Acelerar</button>
-                    <button id="caminhao-frear-btn">Frear</button>
-                </div>
-            </div>
-            <div class="veiculo" id="veiculo-carro">
-                <h2>Carro</h2>
-                <img src="imagens/fusca.png" alt="Ícone de Carro" class="veiculo-img">
-                <p>Modelo: <span id="carro-modelo">Onix</span></p>
-                <p>Cor: <span id="carro-cor">Prata</span></p>
-                <p>Ligado: <span id="carro-ligado">Não</span></p>
-                <p>Velocidade: <span id="carro-velocidade">0</span> km/h</p>
-                <div class="velocidade-bar-container">
-                    <div id="carro-velocidade-bar" class="velocidade-bar"></div>
-                </div>
-                <div class="controles">
-                    <button id="carro-ligar-btn">Ligar</button>
-                    <button id="carro-desligar-btn">Desligar</button>
-                    <button id="carro-acelerar-btn">Acelerar</button>
-                    <button id="carro-frear-btn">Frear</button>
-                </div>
-            </div>
-            <div class="veiculo" id="veiculo-esportivo">
-                <h2>Carro Esportivo</h2>
-                <img src="imagens/rosaesport.png" alt="Ícone de Carro Esportivo" class="veiculo-img">
-                <p>Modelo: <span id="esportivo-modelo">Ferrari 488</span></p>
-                <p>Cor: <span id="esportivo-cor">Vermelha</span></p>
-                <p>Ligado: <span id="esportivo-ligado">Não</span></p>
-                <p>Velocidade: <span id="esportivo-velocidade">0</span> km/h</p>
-                <div class="velocidade-bar-container">
-                    <div id="esportivo-velocidade-bar" class="velocidade-bar"></div>
-                </div>
-                <p>Turbo: <span id="esportivo-turbo">Inativo</span></p>
-                <div class="controles">
-                    <button id="esportivo-ligar-btn">Ligar</button>
-                    <button id="esportivo-desligar-btn">Desligar</button>
-                    <button id="esportivo-acelerar-btn">Acelerar</button>
-                    <button id="esportivo-frear-btn">Frear</button>
-                    <button id="esportivo-turbo-btn" class="turbo-btn">Ativar Turbo</button>
-                </div>
-            </div>
-            <div class="veiculo" id="veiculo-moto">
-                <h2>Motocicleta</h2>
-                <img src="imagens/motoca.jpg" alt="Ícone de Motocicleta" class="veiculo-img">
-                <p>Modelo: <span id="moto-modelo">CB 500</span></p>
-                <p>Cor: <span id="moto-cor">Preta</span></p>
-                <p>Ligado: <span id="moto-ligado">Não</span></p>
-                <p>Velocidade: <span id="moto-velocidade">0</span> km/h</p>
-                <div class="velocidade-bar-container">
-                    <div id="moto-velocidade-bar" class="velocidade-bar"></div>
-                </div>
-                <p>Boost: <span id="moto-boost">Inativo</span></p>
-                <div class="controles">
-                    <button id="moto-ligar-btn">Ligar</button>
-                    <button id="moto-desligar-btn">Desligar</button>
-                    <button id="moto-acelerar-btn">Acelerar</button>
-                    <button id="moto-frear-btn">Frear</button>
-                    <button id="moto-boost-btn" class="turbo-btn">Ativar Boost</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção: Adicionar Veículo -->
-    <section id="secao-add-veiculo" class="content-section">
-        <!-- ... seu conteúdo ... -->
-    </section>
-
-    <!-- Seção: Histórico de Manutenção -->
-    <section id="secao-historico" class="content-section">
-        <!-- ... seu conteúdo ... -->
-    </section>
-
-    <!-- Seção: Agendar Manutenção -->
-    <section id="secao-agendamento" class="content-section">
-        <!-- ... seu conteúdo ... -->
-    </section>
-
-    <!-- Seção: Previsão do Tempo Interativa -->
-    <section id="secao-previsao-tempo" class="content-section">
-        <h2>Previsão do Tempo Interativa</h2>
-        <div class="controles-busca-previsao" style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center; max-width: 500px;">
-            <input type="text" id="cidadePrevisaoInput" placeholder="Digite a cidade" style="flex-grow: 1;">
-            <button id="buscarPrevisaoBtn" class="btn btn-primary">Buscar</button>
-        </div>
-        <div id="controlesInterativosPrevisao" style="margin-bottom: 25px; padding: 15px; background-color: var(--cor-fundo-claro); border-radius: var(--border-radius-padrao); border: 1px solid var(--cor-borda-sutil);">
-            <div id="filtroDiasPrevisao" class="filter-group" style="background-color: transparent; border: none; padding: 0; margin-bottom: 15px;">
-                <label style="margin-bottom:0; font-weight: 500;">Mostrar previsão para:</label>
-                <button class="btn btn-sm" data-dias="1">Hoje</button>
-                <button class="btn btn-sm" data-dias="3">Próximos 3 Dias</button>
-                <button class="btn btn-sm active-filter" data-dias="5">Próximos 5 Dias</button>
-            </div>
-            <div id="destaquesCondicoesPrevisao" style="font-size: 0.9em;">
-                <span style="font-weight: 500; margin-right: 10px;">Destacar dias com:</span>
-                <label class="checkbox-label-previsao"><input type="checkbox" id="chkDestacarChuva"> Chuva</label>
-                <label class="checkbox-label-previsao"><input type="checkbox" id="chkDestacarFrio"> Frio (<10°C)</label>
-                <label class="checkbox-label-previsao"><input type="checkbox" id="chkDestacarCalor"> Calor (>30°C)</label>
-            </div>
-        </div>
-        <div id="previsaoTempoContainer" class="garagem" style="min-height: 200px; background-color: transparent; padding:0;">
-            <p class="placeholder-text" id="previsaoPlaceholder">Digite uma cidade para ver a previsão.</p>
-        </div>
-    </section>
-</main>
-        </main>
-    </div>
-
-    <script src="script.js"></script>
-    
-</body>
-
-    <!-- ... -->
-<!-- </section> -->
-    <!-- RODAPÉ ADICIONADO AQUI -->
-    <footer class="site-footer">
-        <p>Desenvolvido por Nicole Motta</p>
+    <script src="js/classes/Manutencao.js"></script>
+    <script src="js/classes/Veiculo.js"></script>
+    <script src="js/classes/Carro.js"></script>
+    <script src="js/classes/Carroesportivo.js"></script>
+    <script src="js/classes/Caminhao.js"></script>
+    <script src="js/classes/Moto.js"></script>
+    <script src="js/classes/Bicicleta.js"></script>
+    <script src="js/script.js"></script>
+    <footer>
+        <p>© 2024 Nicole - IFPR. Todos os direitos reservados.</p>
+        <p>Projeto Garagem Inteligente - Informática para Internet</p>
     </footer>
-  
+</body>
+</html>
