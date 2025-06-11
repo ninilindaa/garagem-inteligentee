@@ -9,6 +9,8 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 <body>
+
+    <div class="main-wrapper"> <!-- <<<<<< ADICIONE ESTA LINHA -->
     <h1>Garagem da Barbie</h1>
 
     <div id="notificacoes" class="notificacoes-container"></div>
@@ -104,8 +106,71 @@
     <script src="js/classes/Bicicleta.js"></script>
     <script src="js/script.js"></script>
     <footer>
+<body>
+
+    <div class="main-wrapper">
+        <!-- 
+            TODO O SEU CONTEÚDO PRINCIPAL AQUI:
+            - <h1>Garagem da Barbie</h1>
+            - Notificações
+            - Formulários
+            - Garagem Container
+            - Detalhes
+            - Seção de Dicas...
+            ... TUDO MESMO, MENOS O RODAPÉ
+        -->
+    </div> <!-- FIM do main-wrapper -->
+
+
+
+
+    <!-- Seus scripts aqui no final -->
+    <script src="..."></script>
+    
+</body>
+   <!-- =============================================================== -->
+<!-- ========= INÍCIO DAS ADIÇÕES - ATIVIDADE B2.P1.A8 ========= -->
+<!-- =============================================================== -->
+
+<div class="main-wrapper" style="margin-top: 30px;">
+ 
+
+    <!-- Card para Dicas Gerais -->
+    <div class="card-dicas">
+        <h3>Dicas de Manutenção Gerais</h3>
+        <p>Clique para buscar dicas úteis para qualquer veículo.</p>
+        <button id="buscar-dicas-gerais-btn">Buscar Dicas Gerais</button>
+        <div id="dicas-gerais-resultado" class="resultado"></div>
+    </div>
+
+    <!-- Card para Dicas Específicas -->
+    <div class="card-dicas">
+        <h3>Dicas de Manutenção Específicas</h3>
+        <p>Busque dicas para um tipo de veículo. Ex: <strong>carro, moto, caminhao, carroesportivo</strong></p>
+        <input type="text" id="tipo-veiculo-input" placeholder="Digite o tipo do veículo">
+        <button id="buscar-dicas-especificas-btn">Buscar Dicas</button>
+        <div id="dicas-especificas-resultado" class="resultado"></div>
+    </div>
+
+    <!-- Estilos para os novos cards -->
+    <style>
+        .card-dicas { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-top: 20px; }
+        .card-dicas h3 { margin-top: 0; color: #333; }
+        .card-dicas .resultado { margin-top: 15px; padding: 10px; background-color: #e9ecef; border-radius: 4px; min-height: 20px; }
+        .card-dicas .resultado li { margin-bottom: 5px; list-style-type: '🔧 '; }
+    </style>
+</div>
+
+<!-- =============================================================== -->
+<!-- ========= FIM DAS ADIÇÕES - ATIVIDADE B2.P1.A8 ========= -->
+<!-- =============================================================== -->
+    </footer>
+
+    
+</body>
+</html>
+
+        <footer> <!-- O RODAPÉ FICA FORA E DEPOIS DO main-wrapper -->
         <p>© 2024 Nicole - IFPR. Todos os direitos reservados.</p>
         <p>Projeto Garagem Inteligente - Informática para Internet</p>
     </footer>
-</body>
-</html>

@@ -108,3 +108,5 @@ app.listen(port, () => {
     console.log(`Servidor backend rodando em http://localhost:${port}`);
     console.log("Backend iniciado com sucesso!");
 });
+
+
