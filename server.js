@@ -110,3 +110,34 @@ app.listen(port, () => {
 });
 
 
+// =================================================================
+//          👇 COLE ESTE BLOCO NO SEU server.js 👇
+// =================================================================
+
+// ARSENAL DE DADOS DA GARAGEM (DADOS MOCK)
+
+// DENTRO DO SEU server.js
+
+const veiculosDestaque = [
+    { 
+        id: 10, 
+        modelo: "Mustang Mach-E", 
+        ano: 2024, 
+        destaque: "Performance Elétrica com Alma de Mustang.", 
+        imagemUrl: "https://www.ford.com/is/image/content/dam/vdm_ford/live/en_us/ford/nameplate/mustang-mach-e/2023/collections/dm/23_mst_mache_sel_34frnt_vapor_blue.tif?croppathe=1_3x2&wid=720" 
+    },
+    { 
+        id: 11, 
+        modelo: "Tesla Cybertruck", 
+        ano: 2024, 
+        destaque: "O futuro da resistência e utilidade.", 
+        imagemUrl: "https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Cybertruck-Main-Hero-Desktop-LHD.jpg" 
+    },
+    // ... e outros veículos que você adicionar aqui
+];
+
+// DENTRO DO SEU server.js
+
+app.get('/api/garagem/veiculos-destaque', (req, res) => {
+    res.json(veiculosDestaque);
+});
