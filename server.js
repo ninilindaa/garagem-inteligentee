@@ -1,4 +1,4 @@
-// server.js - Código do seu backend para buscar a previsão do tempo
+// server.js - Código do seu backend para buscar a previsão do tempo e servir o Arsenal de Dados
 
 // Importações dos módulos necessários
 // Certifique-se de que você rodou 'npm install express dotenv axios cors' no terminal na pasta do projeto
@@ -41,83 +41,49 @@ app.use((req, res, next) => {
 console.log(`[Servidor] Chave da API OpenWeatherMap carregada? ${!!apiKey ? 'Sim' : 'Não'}`);
 if (!apiKey) {
     console.error("[Servidor] ERRO GRAVE: Chave da API OpenWeatherMap não encontrada nas variáveis de ambiente (.env). Verifique seu arquivo .env e as variáveis de ambiente do sistema/Render.");
-    // Poderíamos adicionar aqui um tratamento para não iniciar o servidor se a chave for essencial
-    // if (!apiKey) { process.exit(1); } // Isso sairia do processo Node.js se a chave não estiver lá
+    // É uma boa prática sair do processo se uma variável essencial não estiver definida em produção
+    // if (process.env.NODE_ENV === 'production') { process.exit(1); }
 }
 
 
-// --- Definição do Endpoints ---
+// --- Definição dos Endpoints ---
 
-// Define um endpoint GET para a rota '/api/previsao/:cidade'
-// ':cidade' é um parâmetro dinâmico que será parte da URL (ex: /api/previsao/Curitiba)
+// Endpoint para buscar a previsão do tempo (EXISTENTE)
 app.get('/api/previsao/:cidade', async (req, res) => {
-    // Extrai o valor do parâmetro 'cidade' da URL da requisição
     const { cidade } = req.params;
-
     console.log(`[Servidor] Processando previsão para a cidade: "${cidade}"`);
 
-    // --- Validações ---
-    // Verifica se a chave da API está disponível no ambiente do servidor
     if (!apiKey) {
         console.error("[Servidor] Requisição '/api/previsao' falhou: Chave da API não configurada no servidor.");
-        // Retorna um erro 500 (Erro Interno do Servidor) se a chave não estiver configurada
         return res.status(500).json({ error: 'Chave da API OpenWeatherMap não configurada no servidor.' });
     }
-    // Verifica se o nome da cidade foi fornecido na URL
     if (!cidade || cidade.trim() === '') {
         console.warn("[Servidor] Requisição '/api/previsao' falhou: Nome da cidade ausente ou vazio.");
-        // Retorna um erro 400 (Requisição Inválida) se a cidade não for fornecida
         return res.status(400).json({ error: 'Nome da cidade é obrigatório.' });
     }
 
-    // --- Chamada para a API Externa (OpenWeatherMap) ---
-    // Monta a URL completa para a API de previsão de 5 dias / 3 horas da OpenWeatherMap
-    // Usa a cidade fornecida e a chave da API segura do backend
-    // encodeURIComponent garante que nomes de cidades com espaços ou caracteres especiais funcionem na URL
     const weatherAPIUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(cidade)}&appid=${apiKey}&units=metric&lang=pt_br`;
 
     try {
         console.log(`[Servidor] Chamando API OpenWeatherMap: ${weatherAPIUrl}`);
-        // Faz a requisição GET para a API OpenWeatherMap usando o pacote axios
         const apiResponse = await axios.get(weatherAPIUrl);
         console.log(`[Servidor] Resposta recebida da OpenWeatherMap. Status: ${apiResponse.status}`);
-
-        // --- Resposta para o Frontend ---
-        // Envia os dados recebidos da OpenWeatherMap de volta para o frontend que chamou este endpoint
-        // Mantém o mesmo status HTTP que a API externa retornou (ex: 200 para sucesso)
         res.status(apiResponse.status).json(apiResponse.data);
 
     } catch (error) {
-        // --- Tratamento de Erros da Chamada para a API Externa ---
         console.error("[Servidor] Erro ao buscar previsão da OpenWeatherMap:", error.response?.data || error.message);
-
-        // Tenta extrair o status e a mensagem de erro da resposta da API externa, se houver
-        // Se não houver resposta (ex: erro de rede do backend ao tentar chamar a API externa), usa defaults
-        const status = error.response?.status || 500; // Se a API externa retornou um status (ex: 404 Not Found), usa ele. Senão, é um erro 500 interno do nosso servidor.
-        const message = error.response?.data?.message || 'Erro ao buscar previsão do tempo no servidor.'; // Pega a mensagem de erro da API externa ou uma mensagem padrão.
-
-        // Envia a mensagem de erro de volta para o frontend com o status HTTP apropriado
+        const status = error.response?.status || 500;
+        const message = error.response?.data?.message || 'Erro ao buscar previsão do tempo no servidor.';
         res.status(status).json({ error: message });
     }
 });
 
 
-// --- Iniciar o Servidor ---
-// Faz o aplicativo Express começar a "ouvir" as requisições na porta definida
-app.listen(port, () => {
-    console.log(`Servidor backend rodando em http://localhost:${port}`);
-    console.log("Backend iniciado com sucesso!");
-});
-
-
 // =================================================================
-//          👇 COLE ESTE BLOCO NO SEU server.js 👇
+//          👇 SEUS DADOS MOCK (ARSENAL DE DADOS) 👇
 // =================================================================
 
-// ARSENAL DE DADOS DA GARAGEM (DADOS MOCK)
-
-// DENTRO DO SEU server.js
-
+// Lista de veículos em destaque para a garagem
 const veiculosDestaque = [
     { 
         id: 10, 
@@ -133,11 +99,119 @@ const veiculosDestaque = [
         destaque: "O futuro da resistência e utilidade.", 
         imagemUrl: "https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Cybertruck-Main-Hero-Desktop-LHD.jpg" 
     },
-    // ... e outros veículos que você adicionar aqui
+    {
+        id: 12,
+        modelo: "Porsche Taycan Turbo S",
+        ano: 2023,
+        destaque: "A eletricidade encontra a emoção Porsche.",
+        imagemUrl: "https://files.porsche.com/filestore/image/multimedia/none/e3-taycan-gts-modelllaunch-kv-desktop/normal/b951333e-6701-11ec-80e9-005056bbfdcb/porsche-normal.jpg"
+    },
+    {
+        id: 13,
+        modelo: "Rivian R1T",
+        ano: 2023,
+        destaque: "Picape elétrica para aventura sem limites.",
+        imagemUrl: "https://assets.rivian.com/2023/07/R1T-Landing-Page-Mobile_Desktop.webp"
+    }
 ];
 
-// DENTRO DO SEU server.js
+// Lista de serviços oferecidos pela garagem
+const servicosOferecidos = [
+    {
+        id: "s1",
+        nome: "Revisão Geral Completa",
+        descricao: "Check-up abrangente de todos os sistemas do veículo, incluindo motor, freios, suspensão e eletrônica.",
+        precoEstimado: "R$ 450,00"
+    },
+    {
+        id: "s2",
+        nome: "Troca de Óleo e Filtros",
+        descricao: "Substituição do óleo do motor e de todos os filtros (óleo, ar, combustível e cabine).",
+        precoEstimado: "R$ 180,00"
+    },
+    {
+        id: "s3",
+        nome: "Balanceamento e Alinhamento",
+        descricao: "Ajuste das rodas para garantir desgaste uniforme dos pneus e melhor dirigibilidade.",
+        precoEstimado: "R$ 120,00"
+    },
+    {
+        id: "s4",
+        nome: "Diagnóstico Computadorizado",
+        descricao: "Uso de scanner automotivo para identificar falhas eletrônicas e problemas no motor.",
+        precoEstimado: "R$ 150,00"
+    },
+    {
+        id: "s5",
+        nome: "Serviço de Freios",
+        descricao: "Verificação e substituição de pastilhas, discos e fluido de freio.",
+        precoEstimado: "R$ 300,00"
+    }
+];
 
+// Lista de ferramentas essenciais
+const ferramentasEssenciais = [
+    {
+        id: "f1",
+        nome: "Chave de Roda Cruz",
+        utilidade: "Essencial para remover e apertar parafusos de roda, ideal para emergências."
+    },
+    {
+        id: "f2",
+        nome: "Macaco Hidráulico",
+        utilidade: "Permite levantar o veículo com segurança para trocar pneus ou realizar manutenções."
+    },
+    {
+        id: "f3",
+        nome: "Kit de Chaves Combinadas",
+        utilidade: "Conjunto versátil de chaves para diversas aplicações, de reparos simples a mais complexos."
+    },
+    {
+        id: "f4",
+        nome: "Multímetro Digital",
+        utilidade: "Fundamental para diagnosticar problemas elétricos e testar a bateria do veículo."
+    },
+    {
+        id: "f5",
+        nome: "Compressor de Ar Portátil",
+        utilidade: "Ótimo para manter a pressão correta dos pneus, evitando desgaste irregular e economizando combustível."
+    }
+];
+
+// Endpoint para retornar a lista de veículos em destaque
 app.get('/api/garagem/veiculos-destaque', (req, res) => {
+    console.log(`[Servidor] Requisição para /api/garagem/veiculos-destaque`);
     res.json(veiculosDestaque);
+});
+
+// Endpoint para retornar a lista de serviços oferecidos
+app.get('/api/garagem/servicos-oferecidos', (req, res) => {
+    console.log(`[Servidor] Requisição para /api/garagem/servicos-oferecidos`);
+    res.json(servicosOferecidos);
+});
+
+// Endpoint para retornar a lista de ferramentas essenciais
+app.get('/api/garagem/ferramentas-essenciais', (req, res) => {
+    console.log(`[Servidor] Requisição para /api/garagem/ferramentas-essenciais`);
+    res.json(ferramentasEssenciais);
+});
+
+// [OPCIONAL] Endpoint para buscar um SERVIÇO ESPECÍFICO por ID
+app.get('/api/garagem/servicos-oferecidos/:idServico', (req, res) => {
+    const { idServico } = req.params;
+    console.log(`[Servidor] Requisição para /api/garagem/servicos-oferecidos/${idServico}`);
+    const servico = servicosOferecidos.find(s => s.id === idServico);
+    if (servico) {
+        res.json(servico);
+    } else {
+        res.status(404).json({ error: `Serviço com ID ${idServico} não encontrado.` });
+    }
+});
+
+
+// --- Iniciar o Servidor ---
+// Faz o aplicativo Express começar a "ouvir" as requisições na porta definida
+app.listen(port, () => {
+    console.log(`Servidor backend rodando em http://localhost:${port}`);
+    console.log("Backend iniciado com sucesso!");
 });
