@@ -1,11 +1,15 @@
 // server.js - Código do seu backend para buscar a previsão do tempo e servir o Arsenal de Dados
 
 // Importações dos módulos necessários
-// Certifique-se de que você rodou 'npm install express dotenv axios cors' no terminal na pasta do projeto
+import Veiculo from './models/Veiculo.js';// Certifique-se de que você rodou 'npm install express dotenv axios cors' no terminal na pasta do projeto
 import express from 'express';
 import dotenv from 'dotenv';
 import axios from 'axios';
-import cors from 'cors'; // Importa o módulo CORS para permitir requisições do frontend
+import mongoose from 'mongoose'; 
+import cors from 'cors';
+
+// Importa o módulo CORS para permitir requisições do frontend
+
 
 // Carrega variáveis de ambiente do arquivo .env
 // Isso lê o arquivo .env na raiz do projeto e adiciona suas variáveis (como OPENWEATHER_API_KEY) a process.env
@@ -205,6 +209,41 @@ app.get('/api/garagem/servicos-oferecidos/:idServico', (req, res) => {
         res.json(servico);
     } else {
         res.status(404).json({ error: `Serviço com ID ${idServico} não encontrado.` });
+    }
+});
+app.post('/api/veiculos', async (req, res) => {
+    try {
+        const novoVeiculoData = req.body;
+        // O Mongoose aplicará as validações do Schema aqui
+        const veiculoCriado = await Veiculo.create(novoVeiculoData);
+        
+        console.log('[Servidor] Veículo criado com sucesso:', veiculoCriado);
+        res.status(201).json(veiculoCriado); // Retorna o veículo criado com o _id do DB
+
+    } catch (error) {
+        console.error("[Servidor] Erro ao criar veículo:", error);
+        // Tratamento de erros de validação e duplicidade do Mongoose
+        if (error.code === 11000) { // Erro de placa duplicada (unique)
+            return res.status(409).json({ error: 'Veículo com esta placa já existe.' });
+        }
+        if (error.name === 'ValidationError') { // Erros de campos obrigatórios, min/max, etc.
+             const messages = Object.values(error.errors).map(val => val.message);
+             return res.status(400).json({ error: messages.join(' ') });
+        }
+        res.status(500).json({ error: 'Erro interno ao criar veículo.' });
+    }
+});
+
+app.get('/api/veiculos', async (req, res) => {
+    try {
+        const todosOsVeiculos = await Veiculo.find(); // .find() sem argumentos busca todos
+        
+        console.log('[Servidor] Buscando todos os veículos do DB.');
+        res.json(todosOsVeiculos);
+
+    } catch (error) {
+        console.error("[Servidor] Erro ao buscar veículos:", error);
+        res.status(500).json({ error: 'Erro interno ao buscar veículos.' });
     }
 });
 
