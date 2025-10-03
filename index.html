@@ -5,12 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garagem Conectada - APIs e Viagens</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Fonte Google Fonts - Para um toque Barbie -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <!-- TELA DE LOGIN/REGISTRO -->
+    <div id="tela-inicio" class="container">
+        <h1>Garagem pink!</h1>
+        <form id="form-login" class="auth-form">
+            <h2>Login</h2>
+            <input type="email" id="login-email" placeholder="E-mail" required>
+            <input type="password" id="login-password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <form id="form-register" class="auth-form">
+            <h2>Registrar</h2>
+            <input type="email" id="register-email" placeholder="E-mail" required>
+            <input type="password" id="register-password" placeholder="Senha" required>
+            <button type="submit">Registrar</button>
+        </form>
+        <div id="auth-mensagem" class="mensagem-erro"></div>
+    </div>
+
+    <!-- GARAGEM (só aparece se logado) -->
+    <div class="container" id="conteudo-garagem" style="display: none;">
+        <button id="btn-logout">Sair</button>
+        
         <h1>Garagem da Barbie</h1>
 
-        <div id="notificacoes-container"></div>
+        <div id="notificacoes-container" class="notificacoes"></div>
 
         <div class="section" id="add-vehicle-section">
             <h2>Adicionar Veículo</h2>
@@ -53,7 +76,7 @@
         <div class="section" id="garage-section">
             <h2>Minha Garagem</h2>
             <ul id="lista-garagem">
-                 <p>Nenhum veículo na garagem.</p>
+                 <p class="mensagem-vazia">Nenhum veículo na garagem.</p>
             </ul>
         </div>
 
@@ -66,7 +89,7 @@
                 <div id="detalhes-veiculo-status">
                     Carregando status...
                 </div>
-                <div id="detalhes-veiculo-botoes">
+                <div id="detalhes-veiculo-botoes" class="grid-botoes">
                     <button id="btn-detail-ligar">Ligar</button>
                     <button id="btn-detail-desligar">Desligar</button>
                     <button id="btn-detail-acelerar">Acelerar</button>
@@ -79,23 +102,15 @@
                 </div>
             </div>
 
-        <!--    <div class="api-details-section">
-                <h3>Detalhes Extras (API Simulada)</h3>
-                <button id="btn-ver-detalhes-extras" style="margin-bottom: 10px;">Ver Detalhes Extras</button>
-                <div id="detalhes-extras-api">
-                    <p>Clique no botão acima para carregar detalhes.</p>
-                </div>
-            </div>-->
-
             <div class="maintenance-details">
                 <h3>Histórico de Manutenção</h3>
                 <ul id="lista-historico">
-                     <li>Nenhum histórico registrado.</li>
+                     <li class="mensagem-vazia">Nenhum histórico registrado.</li>
                 </ul>
 
                 <h3>Agendamentos Futuros</h3>
                 <ul id="lista-agendamentos">
-                     <li>Nenhum agendamento futuro.</li>
+                     <li class="mensagem-vazia">Nenhum agendamento futuro.</li>
                 </ul>
 
                 <h3>Agendar Nova Manutenção</h3>
@@ -121,7 +136,7 @@
                 <input type="text" id="destino-viagem" placeholder="Ex: Rio de Janeiro">
                 <button id="verificar-clima-btn">Verificar Clima</button>
             </div>
-            <div id="previsao-filtros" style="margin-top: 15px; margin-bottom: 10px; display: none;">
+            <div id="previsao-filtros" class="grid-botoes" style="margin-top: 15px; margin-bottom: 10px; display: none;">
                 <button class="btn-filtro-clima" data-periodo="hoje">Hoje</button>
                 <button class="btn-filtro-clima" data-periodo="amanha">Amanhã</button>
                 <button class="btn-filtro-clima" data-periodo="3dias">Próximos 3 dias</button>
@@ -134,14 +149,10 @@
         
         <section class="section secao-dicas" id="secao-dicas-manutencao">
             <h2>Dicas de Manutenção:</h2>
-            
-                    <input type="text" id="input-tipo-veiculo-dica" placeholder="Digite tipo (ex: carro, caminhao)">
-                    <div class="dicas-controles">
+            <div class="dicas-controles">
+                <input type="text" id="input-tipo-veiculo-dica" placeholder="Digite tipo (ex: carro, caminhao)">
                 <button id="btn-buscar-dicas-gerais" class="btn-acao">Buscar Dicas Gerais</button>
-                <div class="form-grupo-dicas">
-                    <button id="btn-buscar-dicas-especificas" class="btn-acao">Buscar Dica Específica</button>
-                    
-                </div>
+                <button id="btn-buscar-dicas-especificas" class="btn-acao">Buscar Dica Específica</button>
             </div>
             <div id="resultado-dicas" class="resultado-api">
             </div>
@@ -154,32 +165,92 @@
     <script src="js/storage.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
-<script>
-// Conecta o formulário de manutenção ao backend
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('form-agendamento');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Pega o veículo selecionado
-            const veiculo = window.veiculoSelecionado;
-            if (!veiculo || !veiculo._id) {
-                alert('Veículo não selecionado!');
-                return;
+    <script>
+        // Autenticação Frontend
+        function mostrarGaragem() {
+            document.getElementById('tela-inicio').style.display = 'none';
+            document.getElementById('conteudo-garagem').style.display = 'block';
+        }
+        function mostrarInicio() {
+            document.getElementById('tela-inicio').style.display = 'flex';
+            document.getElementById('conteudo-garagem').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('token')) {
+                mostrarGaragem();
+            } else {
+                mostrarInicio();
             }
-            // Monta os dados do formulário
-            const dados = {
-                descricaoServico: document.getElementById('agenda-tipo').value,
-                data: document.getElementById('agenda-data').value,
-                custo: parseFloat(document.getElementById('agenda-custo').value),
-                quilometragem: document.getElementById('agenda-descricao').value ? parseFloat(document.getElementById('agenda-descricao').value) : undefined
-            };
-            // Chama a função do frontend
-            adicionarManutencao(veiculo._id, dados);
-            form.reset();
+            // Login
+            document.getElementById('form-login').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.token) {
+                    localStorage.setItem('token', data.token);
+                    mostrarGaragem();
+                } else {
+                    document.getElementById('auth-mensagem').textContent = data.message || 'Login inválido!';
+                }
+            });
+            // Registro
+            document.getElementById('form-register').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('auth-mensagem').textContent = 'Registro realizado! Faça login.';
+                } else {
+                    document.getElementById('auth-mensagem').textContent = data.message || 'Erro ao registrar!';
+                }
+            });
+            // Logout
+            document.getElementById('btn-logout').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                mostrarInicio();
+            });
+
+            // Conecta o formulário de manutenção ao backend
+            const form = document.getElementById('form-agendamento');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Pega o veículo selecionado
+                    const veiculo = window.veiculoSelecionado; // Certifique-se que 'veiculoSelecionado' esteja globalmente disponível ou passado
+                    if (!veiculo || !veiculo._id) {
+                        alert('Veículo não selecionado!');
+                        return;
+                    }
+                    // Monta os dados do formulário
+                    const dados = {
+                        descricaoServico: document.getElementById('agenda-tipo').value,
+                        data: document.getElementById('agenda-data').value,
+                        custo: parseFloat(document.getElementById('agenda-custo').value),
+                        quilometragem: document.getElementById('agenda-descricao').value ? parseFloat(document.getElementById('agenda-descricao').value) : undefined
+                    };
+                    // Chama a função do frontend (certifique-se que 'adicionarManutencao' está disponível)
+                    // adicionarManutencao(veiculo._id, dados); 
+                    console.log("Manutenção agendada para:", veiculo._id, dados); // Apenas um placeholder
+                    form.reset();
+                });
+            }
         });
-    }
-});
-</script>
+
+        // Exemplo: Modifique seus fetchs para enviar o token
+        // const token = localStorage.getItem('token');
+        // fetch('/api/veiculos', { headers: { 'Authorization': `Bearer ${token}` } });
+    </script>
 </body>
 </html>
