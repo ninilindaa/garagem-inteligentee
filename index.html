@@ -3,254 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garagem Conectada - APIs e Viagens</title>
+    <title>Garagem da Barbie</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Fonte Google Fonts - Para um toque Barbie -->
+    <!-- Fonte Google Fonts - Poppins para um toque moderno e leve -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- TELA DE LOGIN/REGISTRO -->
-    <div id="tela-inicio" class="container">
-        <h1>Garagem pink!</h1>
-        <form id="form-login" class="auth-form">
+
+    <!-- Notificações Globais -->
+    <div id="notificacoes-container" class="notificacoes-global"></div>
+
+    <!-- Barra de Navegação Superior (para logo e botão Sair) -->
+    <header id="main-header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://image.similarpng.com/very-image/similarpng_barbie-logo-on-transparent-background_512x512.png" alt="Garagem da Barbie Logo" class="barbie-logo">
+                <span>Garagem da Barbie</span>
+            </div>
+            <button id="btn-logout" class="btn-acao logout-btn" style="display: none;">Sair</button>
+        </div>
+    </header>
+
+    <!-- Página de Login/Registro -->
+    <div id="auth-view" class="auth-container">
+        <h1>Bem-vinda à Garagem da Barbie!</h1>
+        <p>Faça login ou registre-se para acessar sua garagem pessoal e funcionalidades extras.</p>
+
+        <div class="auth-card">
             <h2>Login</h2>
-            <input type="email" id="login-email" placeholder="E-mail" required>
-            <input type="password" id="login-password" placeholder="Senha" required>
-            <button type="submit">Entrar</button>
-        </form>
-        <form id="form-register" class="auth-form">
-            <h2>Registrar</h2>
-            <input type="email" id="register-email" placeholder="E-mail" required>
-            <input type="password" id="register-password" placeholder="Senha" required>
-            <button type="submit">Registrar</button>
-        </form>
-        <div id="auth-mensagem" class="mensagem-erro"></div>
-    </div>
+            <form id="form-login">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" required placeholder="seuemail@exemplo.com">
 
-    <!-- GARAGEM (só aparece se logado) -->
-    <div class="container" id="conteudo-garagem" style="display: none;">
-        <button id="btn-logout">Sair</button>
-        
-        <h1>Garagem da Barbie</h1>
+                <label for="login-password">Senha:</label>
+                <input type="password" id="login-password" required placeholder="********">
 
-        <div id="notificacoes-container" class="notificacoes"></div>
-
-        <div class="section" id="add-vehicle-section">
-            <h2>Adicionar Veículo</h2>
-            <form id="form-add-veiculo">
-                <label for="veiculo-tipo">Tipo:</label>
-                <select id="veiculo-tipo" required>
-                    <option value="Carro">Carro</option>
-                    <option value="CarroEsportivo">Carro Esportivo</option>
-                    <option value="Caminhao">Caminhão</option>
-                </select>
-
-                <label for="veiculo-placa">Placa:</label>
-                <input type="text" id="veiculo-placa" required placeholder="AAA-1234">
-
-                <label for="veiculo-modelo">Modelo:</label>
-                <input type="text" id="veiculo-modelo" required>
-
-                <label for="veiculo-cor">Cor:</label>
-                <input type="text" id="veiculo-cor" required>
-
-                <div id="campos-carro" class="campos-especificos">
-                    <label for="carro-portas">Número de Portas:</label>
-                    <input type="number" id="carro-portas" value="4" min="2">
-                </div>
-                <div id="campos-carroesportivo" class="campos-especificos" style="display: none;">
-                     <label for="carroesportivo-portas">Número de Portas:</label>
-                     <input type="number" id="carroesportivo-portas" value="2" min="2">
-                 </div>
-                 <div id="campos-caminhao" class="campos-especificos" style="display: none;">
-                    <label for="caminhao-eixos">Número de Eixos:</label>
-                    <input type="number" id="caminhao-eixos" value="2" min="2">
-                    <label for="caminhao-capacidade">Capacidade de Carga (kg):</label>
-                    <input type="number" id="caminhao-capacidade" value="5000" min="0">
-                 </div>
-
-                <button type="submit">Adicionar à Garagem</button>
+                <button type="submit" class="btn-primario">Entrar</button>
             </form>
         </div>
 
-        <div class="section" id="garage-section">
-            <h2>Minha Garagem</h2>
-            <ul id="lista-garagem">
-                 <p class="mensagem-vazia">Nenhum veículo na garagem.</p>
-            </ul>
+        <div class="auth-card">
+            <h2>Registro</h2>
+            <form id="form-register">
+                <label for="register-email">Email:</label>
+                <input type="email" id="register-email" required placeholder="novoemail@exemplo.com">
+
+                <label for="register-password">Senha:</label>
+                <input type="password" id="register-password" required placeholder="********">
+
+                <button type="submit" class="btn-secundario">Registrar</button>
+            </form>
         </div>
+    </div>
 
-        <div class="section" id="detalhes-veiculo-section" style="display: none;">
-            <h2 id="detalhes-veiculo-titulo">Detalhes, Manutenção e Interação</h2>
-            <button id="btn-voltar-garagem">Voltar para Garagem</button>
+    <!-- Conteúdo Principal - Garagem (Visível apenas quando logado) -->
+    <div id="main-content-garagem" class="container" style="display: none;">
 
-            <div class="interaction-section">
-                <h3>Status Atual & Interação</h3>
-                <div id="detalhes-veiculo-status">
-                    Carregando status...
-                </div>
-                <div id="detalhes-veiculo-botoes" class="grid-botoes">
-                    <button id="btn-detail-ligar">Ligar</button>
-                    <button id="btn-detail-desligar">Desligar</button>
-                    <button id="btn-detail-acelerar">Acelerar</button>
-                    <button id="btn-detail-buzinar">Buzinar</button>
-                    <button id="btn-detail-turbo" class="btn-especifico" style="display:none;">Ativar/Desativar Turbo</button>
-                    <button id="btn-detail-carregar" class="btn-especifico" style="display:none;">Carregar (1000kg)</button>
-                    <button id="btn-detail-descarregar" class="btn-especifico" style="display:none;">Descarregar (500kg)</button>
-                    <button id="btn-detail-editar" class="btn-editar">Editar Veículo</button>
-                    <button id="btn-detail-excluir" class="btn-excluir">Excluir Veículo</button>
-                </div>
-            </div>
-
-            <div class="maintenance-details">
-                <h3>Histórico de Manutenção</h3>
-                <ul id="lista-historico">
-                     <li class="mensagem-vazia">Nenhum histórico registrado.</li>
-                </ul>
-
-                <h3>Agendamentos Futuros</h3>
-                <ul id="lista-agendamentos">
-                     <li class="mensagem-vazia">Nenhum agendamento futuro.</li>
-                </ul>
-
-                <h3>Agendar Nova Manutenção</h3>
-                <form id="form-agendamento">
-                    <input type="hidden" id="agendamento-veiculo-placa">
-                    <label for="agenda-data">Data:</label>
-                    <input type="date" id="agenda-data" required>
-                    <label for="agenda-tipo">Tipo de Serviço:</label>
-                    <input type="text" id="agenda-tipo" required placeholder="Ex: Troca de óleo">
-                    <label for="agenda-custo">Custo (R$):</label>
-                    <input type="number" id="agenda-custo" step="0.01" min="0" required placeholder="150.00">
-                    <label for="agenda-descricao">Descrição (Opcional):</label>
-                    <textarea id="agenda-descricao" rows="3"></textarea>
-                    <button type="submit">Agendar Serviço</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="section" id="travel-planner-section">
-            <h2>Planejar Viagem (Previsão do Tempo)</h2>
-            <div class="travel-form">
-                <label for="destino-viagem">Cidade de Destino:</label>
-                <input type="text" id="destino-viagem" placeholder="Ex: Rio de Janeiro">
-                <button id="verificar-clima-btn">Verificar Clima</button>
-            </div>
-            <div id="previsao-filtros" class="grid-botoes" style="margin-top: 15px; margin-bottom: 10px; display: none;">
-                <button class="btn-filtro-clima" data-periodo="hoje">Hoje</button>
-                <button class="btn-filtro-clima" data-periodo="amanha">Amanhã</button>
-                <button class="btn-filtro-clima" data-periodo="3dias">Próximos 3 dias</button>
-            </div>
-            <div id="previsao-tempo-resultado" class="api-result">
-                <p>Digite uma cidade e clique em verificar.</p>
-            </div>
-             <p class="api-key-warning"></p>
-        </div>
-        
-        <section class="section secao-dicas" id="secao-dicas-manutencao">
-            <h2>Dicas de Manutenção:</h2>
-            <div class="dicas-controles">
-                <input type="text" id="input-tipo-veiculo-dica" placeholder="Digite tipo (ex: carro, caminhao)">
-                <button id="btn-buscar-dicas-gerais" class="btn-acao">Buscar Dicas Gerais</button>
-                <button id="btn-buscar-dicas-especificas" class="btn-acao">Buscar Dica Específica</button>
-            </div>
-            <div id="resultado-dicas" class="resultado-api">
+        <!-- Seção de Veículos em Destaque (HOME - Visível para todos, mas no layout da garagem) -->
+        <section class="section secao-destaques">
+            <h2>Veículos em Destaque</h2>
+            <div id="cards-veiculos-destaque" class="cards-grid">
+                <p>Carregando destaques...</p>
             </div>
         </section>
 
+        <!-- Seção de Serviços Oferecidos (HOME - Visível para todos, mas no layout da garagem) -->
+        <section class="section secao-servicos">
+            <h2>Nossos Serviços</h2>
+            <ul id="lista-servicos-oferecidos" class="lista-servicos">
+                <li>Carregando serviços...</li>
+            </ul>
+        </section>
+
+        <hr class="section-divider"> <!-- Separador para a área pessoal -->
+
+        <!-- Minha Garagem Pessoal -->
+        <div id="conteudo-garagem-pessoal">
+            <h1>Sua Garagem Pessoal</h1>
+
+            <div class="section" id="add-vehicle-section">
+                <h2>Adicionar Novo Veículo</h2>
+                <form id="form-add-veiculo">
+                    <label for="veiculo-tipo">Tipo:</label>
+                    <select id="veiculo-tipo" required>
+                        <option value="Carro">Carro</option>
+                        <option value="CarroEsportivo">Carro Esportivo</option>
+                        <option value="Caminhao">Caminhão</option>
+                    </select>
+
+                    <label for="veiculo-placa">Placa:</label>
+                    <input type="text" id="veiculo-placa" required placeholder="AAA-1234">
+
+                    <label for="veiculo-modelo">Modelo:</label>
+                    <input type="text" id="veiculo-modelo" required>
+
+                    <label for="veiculo-cor">Cor:</label>
+                    <input type="text" id="veiculo-cor" required>
+
+                    <!-- Campos Específicos (inicialmente Carro visível) -->
+                    <div id="campos-carro" class="campos-especificos">
+                        <label for="carro-portas">Número de Portas:</label>
+                        <input type="number" id="carro-portas" value="4" min="2">
+                    </div>
+                    <div id="campos-carroesportivo" class="campos-especificos" style="display: none;">
+                         <label for="carroesportivo-portas">Número de Portas:</label>
+                         <input type="number" id="carroesportivo-portas" value="2" min="2">
+                     </div>
+                     <div id="campos-caminhao" class="campos-especificos" style="display: none;">
+                        <label for="caminhao-eixos">Número de Eixos:</label>
+                        <input type="number" id="caminhao-eixos" value="2" min="2">
+                        <label for="caminhao-capacidade">Capacidade de Carga (kg):</label>
+                        <input type="number" id="caminhao-capacidade" value="5000" min="0">
+                     </div>
+
+                    <button type="submit" class="btn-primario">Adicionar à Garagem</button>
+                </form>
+            </div>
+
+            <div class="section" id="garage-section">
+                <h2>Meus Veículos</h2>
+                <ul id="lista-garagem" class="lista-garagem-veiculos">
+                     <p class="mensagem-vazia">Nenhum veículo na garagem.</p>
+                </ul>
+            </div>
+
+            <div class="section" id="detalhes-veiculo-section" style="display: none;">
+                <h2 id="detalhes-veiculo-titulo">Detalhes do Veículo</h2>
+                <button id="btn-voltar-garagem" class="btn-secundario">Voltar para a Garagem</button>
+
+                <div class="interaction-section card">
+                    <h3>Status Atual & Interação <span id="placa-detalhe-veiculo"></span></h3>
+                    <div id="detalhes-veiculo-status" class="status-display">
+                        Carregando status...
+                    </div>
+                    <div id="detalhes-veiculo-botoes" class="grid-botoes">
+                        <button id="btn-detail-ligar" class="btn-acao">Ligar</button>
+                        <button id="btn-detail-desligar" class="btn-acao">Desligar</button>
+                        <button id="btn-detail-acelerar" class="btn-acao">Acelerar</button>
+                        <button id="btn-detail-buzinar" class="btn-acao">Buzinar</button>
+                        <button id="btn-detail-turbo" class="btn-acao btn-especifico" style="display:none;">Ativar/Desativar Turbo</button>
+                        <button id="btn-detail-carregar" class="btn-acao btn-especifico" style="display:none;">Carregar (1000kg)</button>
+                        <button id="btn-detail-descarregar" class="btn-acao btn-especifico" style="display:none;">Descarregar (500kg)</button>
+                        <button id="btn-detail-editar" class="btn-editar">Editar Veículo</button>
+                        <button id="btn-detail-excluir" class="btn-excluir">Excluir Veículo</button>
+                    </div>
+                    
+                    <!-- Formulário de Compartilhamento (NOVO) -->
+                    <div class="share-vehicle-section">
+                        <h3>Compartilhar Veículo</h3>
+                        <form id="form-share-veiculo">
+                            <input type="hidden" id="share-veiculo-placa">
+                            <label for="share-email">Email do usuário para compartilhar:</label>
+                            <input type="email" id="share-email" required placeholder="amigo@exemplo.com">
+                            <button type="submit" class="btn-primario">Compartilhar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="maintenance-details card">
+                    <h3>Histórico de Manutenção</h3>
+                    <ul id="lista-historico" class="lista-manutencao">
+                         <li class="mensagem-vazia">Nenhum histórico registrado.</li>
+                    </ul>
+
+                    <h3>Agendamentos Futuros</h3>
+                    <ul id="lista-agendamentos" class="lista-manutencao">
+                         <li class="mensagem-vazia">Nenhum agendamento futuro.</li>
+                    </ul>
+
+                    <h3>Agendar Nova Manutenção</h3>
+                    <form id="form-agendamento">
+                        <input type="hidden" id="agendamento-veiculo-placa">
+                        <label for="agenda-data">Data:</label>
+                        <input type="date" id="agenda-data" required>
+                        <label for="agenda-tipo">Tipo de Serviço:</label>
+                        <input type="text" id="agenda-tipo" required placeholder="Ex: Troca de óleo">
+                        <label for="agenda-custo">Custo (R$):</label>
+                        <input type="number" id="agenda-custo" step="0.01" min="0" required placeholder="150.00">
+                        <label for="agenda-descricao">Descrição (Opcional):</label>
+                        <textarea id="agenda-descricao" rows="3"></textarea>
+                        <button type="submit" class="btn-primario">Agendar Serviço</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="section" id="travel-planner-section">
+                <h2>Planejar Viagem (Previsão do Tempo)</h2>
+                <div class="travel-form card">
+                    <label for="destino-viagem">Cidade de Destino:</label>
+                    <input type="text" id="destino-viagem" placeholder="Ex: Rio de Janeiro">
+                    <button id="verificar-clima-btn" class="btn-primario">Verificar Clima</button>
+                </div>
+                <div id="previsao-filtros" class="grid-botoes" style="margin-top: 15px; margin-bottom: 10px; display: none;">
+                    <button class="btn-filtro-clima btn-acao" data-periodo="hoje">Hoje</button>
+                    <button class="btn-filtro-clima btn-acao" data-periodo="amanha">Amanhã</button>
+                    <button class="btn-filtro-clima btn-acao" data-periodo="3dias">Próximos 3 dias</button>
+                </div>
+                <div id="previsao-tempo-resultado" class="api-result card">
+                    <p>Digite uma cidade e clique em verificar.</p>
+                </div>
+                 <p class="api-key-warning"></p>
+            </div>
+            
+            <section class="section secao-dicas">
+                <h2>Dicas de Manutenção</h2>
+                <div class="dicas-controles card">
+                    <input type="text" id="input-tipo-veiculo-dica" placeholder="Digite tipo (ex: carro, caminhao)">
+                    <button id="btn-buscar-dicas-gerais" class="btn-secundario">Buscar Dicas Gerais</button>
+                    <button id="btn-buscar-dicas-especificas" class="btn-secundario">Buscar Dica Específica</button>
+                </div>
+                <div id="resultado-dicas" class="resultado-api card">
+                </div>
+            </section>
+        </div>
     </div>
 
-    <script src="js/manuntencao.js"></script>
+    <!-- Scripts JavaScript - Carregados no final para melhor performance -->
+    <script src="js/storage.js"></script> <!-- Mova para o topo do main.js ou inclua aqui se for helper -->
     <script src="js/veiculo.js"></script>
-    <script src="js/storage.js"></script>
+    <script src="js/manutencao.js"></script> <!-- A classe Manutencao deve ser carregada antes do UI/Main -->
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
-    <script>
-        // Autenticação Frontend
-        function mostrarGaragem() {
-            document.getElementById('tela-inicio').style.display = 'none';
-            document.getElementById('conteudo-garagem').style.display = 'block';
-        }
-        function mostrarInicio() {
-            document.getElementById('tela-inicio').style.display = 'flex';
-            document.getElementById('conteudo-garagem').style.display = 'none';
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('token')) {
-                mostrarGaragem();
-            } else {
-                mostrarInicio();
-            }
-            // Login
-            document.getElementById('form-login').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if (res.ok && data.token) {
-                    localStorage.setItem('token', data.token);
-                    mostrarGaragem();
-                } else {
-                    document.getElementById('auth-mensagem').textContent = data.message || 'Login inválido!';
-                }
-            });
-            // Registro
-            document.getElementById('form-register').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    document.getElementById('auth-mensagem').textContent = 'Registro realizado! Faça login.';
-                } else {
-                    document.getElementById('auth-mensagem').textContent = data.message || 'Erro ao registrar!';
-                }
-            });
-            // Logout
-            document.getElementById('btn-logout').addEventListener('click', function() {
-                localStorage.removeItem('token');
-                mostrarInicio();
-            });
-
-            // Conecta o formulário de manutenção ao backend
-            const form = document.getElementById('form-agendamento');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Pega o veículo selecionado
-                    const veiculo = window.veiculoSelecionado; // Certifique-se que 'veiculoSelecionado' esteja globalmente disponível ou passado
-                    if (!veiculo || !veiculo._id) {
-                        alert('Veículo não selecionado!');
-                        return;
-                    }
-                    // Monta os dados do formulário
-                    const dados = {
-                        descricaoServico: document.getElementById('agenda-tipo').value,
-                        data: document.getElementById('agenda-data').value,
-                        custo: parseFloat(document.getElementById('agenda-custo').value),
-                        quilometragem: document.getElementById('agenda-descricao').value ? parseFloat(document.getElementById('agenda-descricao').value) : undefined
-                    };
-                    // Chama a função do frontend (certifique-se que 'adicionarManutencao' está disponível)
-                    // adicionarManutencao(veiculo._id, dados); 
-                    console.log("Manutenção agendada para:", veiculo._id, dados); // Apenas um placeholder
-                    form.reset();
-                });
-            }
-        });
-
-        // Exemplo: Modifique seus fetchs para enviar o token
-        // const token = localStorage.getItem('token');
-        // fetch('/api/veiculos', { headers: { 'Authorization': `Bearer ${token}` } });
-    </script>
 </body>
 </html>
